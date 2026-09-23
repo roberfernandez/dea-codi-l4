@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dea_code_source.dart';
+import 'dea_platform_stub.dart' if (dart.library.js_interop) 'dea_web.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color(0xFFFDB913), // Groc L4
         ),
       ),
-      home: const DeaCodiL4Page(),
+      home: DeaCodiL4Page(codeSource: protectedCodeSource()),
     );
   }
 }
@@ -65,6 +66,23 @@ class _DeaCodiL4PageState extends State<DeaCodiL4Page> {
   bool demostracio = true;
   int requestId = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    registerCodeClear(() {
+      if (!mounted) return;
+      ++requestId;
+      setState(() { codiMostrat = ''; avis = null; estacioSeleccionada = null; });
+    });
+  }
+
+  @override
+  void dispose() {
+    registerCodeClear(() {});
+    ++requestId;
+    super.dispose();
+  }
+
   Future<void> seleccionarEstacio(String? estacio) async {
     final id = ++requestId;
     setState(() {
@@ -84,6 +102,7 @@ class _DeaCodiL4PageState extends State<DeaCodiL4Page> {
     } catch (_) {
       if (!mounted || id != requestId) return;
       setState(() {
+        codiMostrat = "";
         avis = "Codi no disponible. Cal accés autoritzat al servei DEA.";
       });
     }

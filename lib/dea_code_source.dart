@@ -18,7 +18,7 @@ class DemoDeaCodeSource implements DeaCodeSource {
       const DeaCodeResult(displayCode: 'C + ---- + X', isDemo: true);
 }
 
-/// Integration seam only; not enabled in the public demo.
+/// Returns the original backend text verbatim; never persists it.
 /// The future transport must use the common login session. The server must
 /// validate both authentication and approval on EVERY request, deny by default,
 /// and return Cache-Control: no-store. Never supply a static client secret.
@@ -31,9 +31,9 @@ class BackendDeaCodeSource implements DeaCodeSource {
   @override
   Future<DeaCodeResult> getCode(String station) async {
     final code = await fetchAuthorizedCode(station);
-    if (!RegExp(r'^\d{4}$').hasMatch(code)) {
+    if (code.isEmpty || code.length > 80) {
       throw const FormatException('Invalid DEA service response');
     }
-    return DeaCodeResult(displayCode: 'C + $code + X', isDemo: false);
+    return DeaCodeResult(displayCode: code, isDemo: false);
   }
 }

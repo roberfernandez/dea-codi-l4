@@ -18,8 +18,17 @@ void main() {
 
   test('invalid backend response is rejected', () {
     final source = BackendDeaCodeSource(
-      fetchAuthorizedCode: (_) async => 'invalid',
+      fetchAuthorizedCode: (_) async => '',
     );
     expect(source.getCode('La Pau'), throwsFormatException);
+  });
+
+  test('backend text is preserved exactly', () async {
+    final source = BackendDeaCodeSource(
+      fetchAuthorizedCode: (_) async => 'TEST_ONLY',
+    );
+    final result = await source.getCode('La Pau');
+    expect(result.displayCode, 'TEST_ONLY');
+    expect(result.isDemo, isFalse);
   });
 }
