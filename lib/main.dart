@@ -115,6 +115,18 @@ class _DeaCodiL4PageState extends State<DeaCodiL4Page> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'Tornar a TMB Agent',
+          onPressed: openTmbAgent,
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(7),
+            child: Image.network(
+              'https://roberfernandez.github.io/tmb-agent/assets/icons/tmb-agent-192.png',
+              width: 30,
+              height: 30,
+            ),
+          ),
+        ),
         title: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
